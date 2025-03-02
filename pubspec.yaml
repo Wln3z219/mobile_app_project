@@ -33,6 +33,7 @@ dependencies:
   path_provider: ^2.0.11
   sqflite: ^2.0.0+4 # Add this if you want an SQLite database
   shared_preferences: ^2.0.15 # Add this if you want simple local storage
+  mongo_dart: ^0.10.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,7 +61,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  assets :
+    - assets/images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
