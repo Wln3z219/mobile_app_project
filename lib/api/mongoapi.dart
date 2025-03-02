@@ -1,3 +1,4 @@
+// c:\Users\UsEr\Desktop\Mobile_Pro\mobile_app_project\lib\api\mongoapi.dart
 import 'dart:developer';
 import 'dart:typed_data';
 import 'package:mongo_dart/mongo_dart.dart';
@@ -18,7 +19,7 @@ class MongoDatabase {
   static Future<Uint8List?> getImageData() async {
     try {
       // Find the first document in the collection
-        final imageDocument = await userCollection.findOne();
+      final imageDocument = await userCollection.findOne();
 
       if (imageDocument != null) {
         // Get the image data from the 'picture' field
@@ -38,6 +39,28 @@ class MongoDatabase {
     } catch (e) {
       print('Error fetching or decoding image: $e');
       return null;
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getQuestions() async {
+    try {
+      var collection = db.collection("Question");
+      List<Map<String, dynamic>> questions = await collection.find().toList();
+      return questions;
+    } catch (e) {
+      print('Error fetching questions: $e');
+      return [];
+    }
+  }
+
+  static Future<List<Map<String, dynamic>>> getModes() async {
+    try {
+      var collection = db.collection("Mode");
+      List<Map<String, dynamic>> modes = await collection.find().toList();
+      return modes;
+    } catch (e) {
+      print('Error fetching modes: $e');
+      return [];
     }
   }
 }

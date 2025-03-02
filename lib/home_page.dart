@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const ModeSelectPage()),
                         );
                       },
-                      child: const Text('Beginner'),
+                      child: const Text('Select Mode'),
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => const ModeSelectPage()),
                         );
                       },
-                      child: const Text('Advance'),
+                      child: const Text('History'),
                     ),
                     const SizedBox(height: 30),
                     ElevatedButton(
