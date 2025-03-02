@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/api/mongoapi.dart';
+import 'package:mobile_app_project/questionpage.dart'; // Import QuestionPage
 import 'dart:convert';
 
 class ModeSelectPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
   Future<void> _fetchModes() async {
     try {
       List<Map<String, dynamic>> modesData = await MongoDatabase.getModes();
-
+      print("data modes : $modesData"); //debug
       setState(() {
         _modes = modesData;
         _isLoading = false;
@@ -33,7 +34,6 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
       setState(() {
         _isLoading = false;
       });
-      // Optionally show an error message to the user.
     }
   }
 
@@ -53,7 +53,14 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
           ? const Center(child: CircularProgressIndicator())
           : (_modes.isEmpty
               ? const Center(child: Text("No modes found!"))
-              : ListView.builder(
+              : GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // 2 columns
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                    childAspectRatio: 0.8, // Adjust aspect ratio as needed
+                  ),
                   itemCount: _modes.length,
                   itemBuilder: (context, index) {
                     final mode = _modes[index];
@@ -71,42 +78,55 @@ class ModeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String base64Image = mode['images'] ?? "";
+    String base64Image = mode['image'] ?? "";
     Uint8List? imageBytes;
     try {
       if (base64Image.isNotEmpty) {
-         imageBytes = base64.decode(base64Image);
+        imageBytes = base64.decode(base64Image);
       }
     } catch (e) {
       print('Error decoding image: $e');
       imageBytes = null;
     }
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text(
+    return GestureDetector( // Wrap in GestureDetector
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => QuestionPage(mode: mode), //Pass the mode to QuestionPage
+            ),
+          );
+        },
+      child: Card(
+        elevation: 4.0, // Add shadow for better visual appeal
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+               if (imageBytes != null)
+                  Expanded( // Take up available space
+                    child: Center(
+                      child: Image.memory(
+                        imageBytes,
+                        fit: BoxFit.contain, // Use contain to fit image
+                      ),
+                    ),
+                  ),
+              const SizedBox(height: 8.0), // Space between image and text
+              Text(
                 mode['mode'] ?? "No Mode Name",
                 style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 20),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
                 textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 8.0),
-            if (imageBytes != null)
-              Center(
-                child: Image.memory(
-                  imageBytes,
-                  width: 200,
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-              )
-          ],
+            ],
+          ),
         ),
       ),
     );
