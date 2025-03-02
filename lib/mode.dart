@@ -59,7 +59,7 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
                     crossAxisCount: 2, // 2 columns
                     crossAxisSpacing: 10.0,
                     mainAxisSpacing: 10.0,
-                    childAspectRatio: 0.8, // Adjust aspect ratio as needed
+                    childAspectRatio: 0.8,
                   ),
                   itemCount: _modes.length,
                   itemBuilder: (context, index) {

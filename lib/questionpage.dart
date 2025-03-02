@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -134,11 +133,10 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   void _goToScorePage() {
-    saveHistory(widget.mode['mode'], _score);
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => ScorePage(score: _score)));
+            builder: (context) => ScorePage(score: _score,mode: widget.mode['mode'])));
   }
 
   @override

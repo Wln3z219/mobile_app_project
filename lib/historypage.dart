@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_project/api/mongoapi.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -65,8 +64,14 @@ class _HistoryPageState extends State<HistoryPage> {
                     return Card(
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        title: Text('Mode: ${historyEntry['mode']}'),
-                        subtitle: Text('Score: ${historyEntry['score']}'),
+                        title: Text('Name: ${historyEntry['name']}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             Text('Mode: ${historyEntry['mode']}'),
+                             Text('Score: ${historyEntry['score']}'),
+                          ],
+                        ),
                         trailing: Text(historyEntry['timestamp']),
                       ),
                     );
@@ -77,12 +82,13 @@ class _HistoryPageState extends State<HistoryPage> {
 }
 
 // Function to save history
-Future<void> saveHistory(String mode, int score) async {
+Future<void> saveHistory(String name,String mode, int score) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     String timestamp = DateTime.now().toString().substring(0, 19); // Get current timestamp
     // Structure of a history entry
     Map<String, dynamic> newHistoryEntry = {
+      'name':name,
       'mode': mode,
       'score': score,
       'timestamp': timestamp
