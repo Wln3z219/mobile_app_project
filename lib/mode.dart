@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/api/mongoapi.dart';
-import 'package:mobile_app_project/questionpage.dart'; // Import QuestionPage
+import 'package:mobile_app_project/detailpage.dart'; // Import DetailPage
 import 'dart:convert';
 
 class ModeSelectPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
   Future<void> _fetchModes() async {
     try {
       List<Map<String, dynamic>> modesData = await MongoDatabase.getModes();
-      print("data modes : $modesData"); //debug
+      print("data modes : $modesData");
       setState(() {
         _modes = modesData;
         _isLoading = false;
@@ -93,7 +93,7 @@ class ModeCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => QuestionPage(mode: mode), //Pass the mode to QuestionPage
+              builder: (context) => DetailPage(modeName: mode['mode']), // Navigate to DetailPage and pass modeName
             ),
           );
         },

@@ -1,8 +1,8 @@
-// c:\Users\UsEr\Desktop\Mobile_Pro\mobile_app_project\lib\api\mongoapi.dart
 import 'dart:developer';
 import 'dart:typed_data';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'dart:convert';
+import 'dart:math';
 
 import 'constant.dart';
 
@@ -18,15 +18,12 @@ class MongoDatabase {
 
   static Future<Uint8List?> getImageData() async {
     try {
-      // Find the first document in the collection
       final imageDocument = await userCollection.findOne();
 
       if (imageDocument != null) {
-        // Get the image data from the 'picture' field
         final base64String = imageDocument['picture'];
 
         if (base64String != null && base64String is String) {
-          // Decode the base64 string to Uint8List
           return base64.decode(base64String);
         } else {
           print('imageData is null or not a String');
@@ -42,13 +39,27 @@ class MongoDatabase {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getQuestions() async {
+  static Future<List<Map<String, dynamic>>> getQuestions(String collectionName) async {
     try {
-      var collection = db.collection("Question");
-      List<Map<String, dynamic>> questions = await collection.find().toList();
-      return questions;
+      var collection = db.collection(collectionName);
+      final count = await collection.count();
+      print("count is $count");
+      if (count == 0) {
+        return [];
+      }
+    // Fetch all the questions
+      List<Map<String, dynamic>> allQuestions = await collection.find().toList();
+
+    // Shuffle the list of questions to ensure randomness
+      allQuestions.shuffle();
+
+    // Take only the first 5 questions (or fewer if there are not enough)
+    int numberOfQuestionsToReturn = min(5, allQuestions.length);
+    List<Map<String, dynamic>> randomQuestions = allQuestions.sublist(0, numberOfQuestionsToReturn);
+      print("question is $randomQuestions");
+      return randomQuestions;
     } catch (e) {
-      print('Error fetching questions: $e');
+      print('Error fetching random question: $e');
       return [];
     }
   }

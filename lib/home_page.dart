@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/aboutuspage.dart';
 import 'package:mobile_app_project/mode.dart';
+import 'package:mobile_app_project/historypage.dart'; // Import HistoryPage
 import 'api/mongoapi.dart';
 
 void main() {
@@ -73,12 +74,12 @@ class _HomePageState extends State<HomePage> {
                       child: const Text('Select Mode'),
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
+                    ElevatedButton( // History button
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ModeSelectPage()),
+                              builder: (context) => const HistoryPage()), // Go to HistoryPage
                         );
                       },
                       child: const Text('History'),

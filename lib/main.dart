@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/home_page.dart';
+import 'package:mobile_app_project/historypage.dart'; // Import HistoryPage
 import 'api/mongoapi.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
+  WidgetsFlutterBinding.ensureInitialized();
   await MongoDatabase.connect();
-  
+
   runApp(const MyApp());
 }
 
