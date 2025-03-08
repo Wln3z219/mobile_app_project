@@ -53,6 +53,9 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
         elevation: 0,
       ),
       body: Container(
+        padding: EdgeInsets.only(
+          top: 75,
+        ),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
