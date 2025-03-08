@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/api/mongoapi.dart';
 import 'package:mobile_app_project/scorepage.dart'; // Import ScorePage
-import 'package:mobile_app_project/historypage.dart'; // Import HistoryPage
 
 class QuestionPage extends StatefulWidget {
   final Map<String, dynamic> mode;
@@ -136,25 +135,39 @@ class _QuestionPageState extends State<QuestionPage> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => ScorePage(score: _score,mode: widget.mode['mode'])));
+            builder: (context) =>
+                ScorePage(score: _score, mode: widget.mode['mode'])));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true, // Extend body behind app bar
       appBar: AppBar(
         title: Text("Questions - ${widget.mode['mode']}"),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : (_question == null
-              ? const Center(child: Text("No questions found!"))
-              : QuestionCard(
-                  question: _question!,
-                  onAnswerSelected: _handleAnswerSelected,
-                  selectedAnswer: _selectedAnswer,
-                  answerChecked: _answerChecked,
-                )),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.lightBlueAccent,
+              Colors.white,
+            ],
+          ),
+        ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : (_question == null
+                ? const Center(child: Text("No questions found!"))
+                : QuestionCard(
+                    question: _question!,
+                    onAnswerSelected: _handleAnswerSelected,
+                    selectedAnswer: _selectedAnswer,
+                    answerChecked: _answerChecked,
+                  )),
+      ),
     );
   }
 }
@@ -199,27 +212,28 @@ class QuestionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image (if available)
-             if (imageBytes != null)
-                Center(
-                  child: Image.memory(
-                    imageBytes,
-                    width: 200,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
+            if (imageBytes != null)
+              Center(
+                child: Image.memory(
+                  imageBytes,
+                  width: 200,
+                  height: 150,
+                  fit: BoxFit.cover,
                 ),
+              ),
 
-             const SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
 
             // Question Text
             Center(
               child: Text(
                 question['question'] ?? "No Question Text",
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 textAlign: TextAlign.center,
               ),
             ),
-             const SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
 
             // Answer Choices (now in a Grid)
             Expanded(
@@ -227,29 +241,36 @@ class QuestionCard extends StatelessWidget {
                 child: GridView.count(
                   crossAxisCount: 2,
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(), // Prevent scrolling
+                  physics: const NeverScrollableScrollPhysics(),
+                  // Prevent scrolling
                   padding: const EdgeInsets.all(8.0),
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
                   childAspectRatio: 3,
-                  children: choices.map((choice) => GestureDetector(
-                    onTap: answerChecked
-                        ? null
-                        : () {
-                      onAnswerSelected(choice);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: selectedAnswer == choice
-                            ? Colors.blue.withOpacity(0.5)
-                            : null,
-                        borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: Colors.grey),
-                      ),
-                      child: Center(child: Text(choice,textAlign: TextAlign.center,)),
-                    ),
-                  )).toList(),
+                  children: choices
+                      .map((choice) => GestureDetector(
+                            onTap: answerChecked
+                                ? null
+                                : () {
+                                    onAnswerSelected(choice);
+                                  },
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: selectedAnswer == choice
+                                    ? Colors.blue.withOpacity(0.5)
+                                    : null,
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                choice,
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                          ))
+                      .toList(),
                 ),
               ),
             ),
