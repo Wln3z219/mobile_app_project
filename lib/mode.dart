@@ -49,11 +49,11 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
           },
         ),
         title: const Text("Select Mode"),
-         backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           top: 75,
         ),
         decoration: const BoxDecoration(
@@ -123,43 +123,31 @@ class ModeCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.white,
-                Colors.blue,
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (imageBytes != null)
-                  Expanded(
-                    // Take up available space
-                    child: Center(
-                      child: Image.memory(
-                        imageBytes,
-                        fit: BoxFit.contain, // Use contain to fit image
-                      ),
+        child: Padding( //remove container and add padding
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (imageBytes != null)
+                Expanded(
+                  // Take up available space
+                  child: Center(
+                    child: Image.memory(
+                      imageBytes,
+                      fit: BoxFit.contain, // Use contain to fit image
                     ),
                   ),
-                const SizedBox(height: 8.0), // Space between image and text
-                Text(
-                  mode['mode'] ?? "No Mode Name",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
+              const SizedBox(height: 8.0), // Space between image and text
+              Text(
+                mode['mode'] ?? "No Mode Name",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ),
