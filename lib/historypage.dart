@@ -28,16 +28,31 @@ class _HistoryPageState extends State<HistoryPage> {
       final historyString = prefs.getString('history');
       if (historyString != null) {
         List<dynamic> decodedHistory = jsonDecode(historyString);
-        _history = decodedHistory.map((item) => item as Map<String, dynamic>).toList();
+        _history = decodedHistory
+            .map((item) => item as Map<String, dynamic>)
+            .toList();
       }
       setState(() {
         _isLoading = false;
       });
     } catch (e) {
       print('Error loading history: $e');
-        setState(() {
+      setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _clearHistory() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('history');
+      setState(() {
+        _history.clear();
+      });
+      print('History cleared successfully.');
+    } catch (e) {
+      print('Error clearing history: $e');
     }
   }
 
@@ -53,10 +68,18 @@ class _HistoryPageState extends State<HistoryPage> {
           },
         ),
         title: const Text('History'),
-          backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              _showClearHistoryDialog(context);
+            },
+          ),
+        ],
       ),
-      body:Container(
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -67,43 +90,70 @@ class _HistoryPageState extends State<HistoryPage> {
             ],
           ),
         ),
-       child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _history.isEmpty
-              ? const Center(child: Text('No history yet!'))
-              : ListView.builder(
-                  itemCount: _history.length,
-                  itemBuilder: (context, index) {
-                    final historyEntry = _history[index];
-                    return Card(
-                      margin: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        title: Text('Name: ${historyEntry['name']}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                             Text('Mode: ${historyEntry['mode']}'),
-                             Text('Score: ${historyEntry['score']}'),
-                          ],
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _history.isEmpty
+                ? const Center(child: Text('No history yet!'))
+                : ListView.builder(
+                    itemCount: _history.length,
+                    itemBuilder: (context, index) {
+                      final historyEntry = _history[index];
+                      return Card(
+                        margin: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text('Name: ${historyEntry['name']}'),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Mode: ${historyEntry['mode']}'),
+                              Text('Score: ${historyEntry['score']}'),
+                            ],
+                          ),
+                          trailing: Text(historyEntry['timestamp']),
                         ),
-                        trailing: Text(historyEntry['timestamp']),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
       ),
+    );
+  }
+
+  void _showClearHistoryDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Clear History"),
+          content: const Text("Are you sure you want to clear all history?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text("Clear"),
+              onPressed: () {
+                _clearHistory();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 // Function to save history
-Future<void> saveHistory(String name,String mode, int score) async {
+Future<void> saveHistory(String name, String mode, int score) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    String timestamp = DateTime.now().toString().substring(0, 19); // Get current timestamp
-    // Structure of a history entry
+    String timestamp =
+        DateTime.now().toString().substring(0, 19); // Get current timestamp
     Map<String, dynamic> newHistoryEntry = {
-      'name':name,
+      'name': name,
       'mode': mode,
       'score': score,
       'timestamp': timestamp
@@ -115,7 +165,9 @@ Future<void> saveHistory(String name,String mode, int score) async {
     if (historyString != null) {
       // If history already exists, add the new entry to it
       List<dynamic> decodedHistory = jsonDecode(historyString);
-      history = decodedHistory.map((item) => item as Map<String, dynamic>).toList();
+      history = decodedHistory
+          .map((item) => item as Map<String, dynamic>)
+          .toList();
       history.add(newHistoryEntry);
     } else {
       // If history doesn't exist yet, create a new list with the new entry

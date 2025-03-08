@@ -49,7 +49,6 @@ class _AboutuspageState extends State<Aboutuspage> {
         ),
         title: const Center(child: Text("About us")),
         backgroundColor: Colors.transparent,
-        elevation: 0,
       ),
       body: Container(
         decoration: const BoxDecoration(

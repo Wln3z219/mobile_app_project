@@ -7,17 +7,18 @@ import 'dart:math';
 import 'constant.dart';
 
 class MongoDatabase {
-  static var db, userCollection;
+  static var db;
 
   static connect() async {
     db = await Db.create(MONGO_URL);
     await db.open();
     inspect(db);
-    userCollection = db.collection(COLLECTION_NAME);
   }
 
+  //API HomeImage
   static Future<Uint8List?> getImageData() async {
     try {
+      var userCollection = db.collection("HomeImage");
       final imageDocument = await userCollection.findOne();
 
       if (imageDocument != null) {
@@ -39,7 +40,10 @@ class MongoDatabase {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getAboutUsData(String collectionName) async {
+  //API About us
+  static Future<List<Map<String, dynamic>>> getAboutUsData(
+    String collectionName,
+  ) async {
     try {
       var collection = db.collection(collectionName);
       List<Map<String, dynamic>> aboutUsData = await collection.find().toList();
@@ -50,7 +54,10 @@ class MongoDatabase {
     }
   }
 
-  static Future<List<Map<String, dynamic>>> getQuestions(String collectionName) async {
+  //API Question Page
+  static Future<List<Map<String, dynamic>>> getQuestions(
+    String collectionName,
+  ) async {
     try {
       var collection = db.collection(collectionName);
       final count = await collection.count();
@@ -58,40 +65,10 @@ class MongoDatabase {
       if (count == 0) {
         return [];
       }
-    // Fetch all the questions
-      List<Map<String, dynamic>> allQuestions = await collection.find().toList();
-
-    // Shuffle the list of questions to ensure randomness
-      allQuestions.shuffle();
-
-    // Take only the first 5 questions (or fewer if there are not enough)
-    int numberOfQuestionsToReturn = min(5, allQuestions.length);
-    List<Map<String, dynamic>> randomQuestions = allQuestions.sublist(0, numberOfQuestionsToReturn);
-      print("question is $randomQuestions");
-      return randomQuestions;
-    } catch (e) {
-      print('Error fetching random question: $e');
-      return [];
-    }
-  }
-  static Future<List<Map<String, dynamic>>> getQuestionsByMode(String collectionName, String modeName) async {
-    try {
-      var collection = db.collection(collectionName);
-      final count = await collection.count();
-      print("count is $count");
-      if (count == 0) {
-        return [];
-      }
-
-      // Fetch all questions related to the mode
-      List<Map<String, dynamic>> allQuestions = await collection.find(where.eq('mode', modeName)).toList();
-      print("mode is $modeName");
-      // Shuffle the list of questions to ensure randomness
-      allQuestions.shuffle();
-
-      // Take only the first 5 questions (or fewer if there are not enough)
-      int numberOfQuestionsToReturn = min(5, allQuestions.length);
-      List<Map<String, dynamic>> randomQuestions = allQuestions.sublist(0, numberOfQuestionsToReturn);
+      List<Map<String, dynamic>> allQuestions = await collection.find().toList(); // Pulling Question List
+      allQuestions.shuffle(); // Shuffle
+      int numberOfQuestionsToReturn = min(5, allQuestions.length); // Take only the first 5 questions (or fewer if there are not enough)
+      List<Map<String, dynamic>> randomQuestions = allQuestions.sublist(0,numberOfQuestionsToReturn,);
       print("question is $randomQuestions");
       return randomQuestions;
     } catch (e) {
@@ -100,6 +77,7 @@ class MongoDatabase {
     }
   }
 
+  //API Select Mode Page
   static Future<List<Map<String, dynamic>>> getModes() async {
     try {
       var collection = db.collection("Mode");

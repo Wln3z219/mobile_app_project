@@ -26,19 +26,17 @@ class _DetailPageState extends State<DetailPage> {
 
   Future<void> _fetchModeDetail() async {
     try {
-      // get all mode
       List<Map<String, dynamic>> modesData = await MongoDatabase.getModes();
       //filter to get only the selected mode
-      List<Map<String, dynamic>> filteredMode = modesData.where((mode) => mode['mode'] == widget.modeName).toList();
+      List<Map<String, dynamic>> filteredMode =
+          modesData.where((mode) => mode['mode'] == widget.modeName).toList();
 
-      if(filteredMode.isNotEmpty){
-        //set data
+      if (filteredMode.isNotEmpty) {
         setState(() {
-        _modeDetail = filteredMode[0];
-        _isLoading = false;
+          _modeDetail = filteredMode[0];
+          _isLoading = false;
         });
-      }else{
-        //no data
+      } else {
         setState(() {
           _modeDetail = null;
           _isLoading = false;
@@ -69,62 +67,58 @@ class _DetailPageState extends State<DetailPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body:Container(
-        padding: EdgeInsets.only(
-          top: 75,
-        ),
+      body: Container(
+        padding: EdgeInsets.only(top: 75),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue,
-              Colors.white,
-            ],
+            colors: [Colors.blue, Colors.white],
           ),
         ),
-      child: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : (_modeDetail == null
-              ? const Center(child: Text("Mode detail not found!"))
-              : Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Image at the top
-                      _buildImageSection(),
-                      const SizedBox(height: 20),
-                      // Detail section
-                      _buildDetailSection(),
-                      const Spacer(), // Push the button to the bottom
-                      // Start Game button
-                      ElevatedButton(
-                        onPressed: () {
-                          // Navigate to the question page
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => QuestionPage(
-                                  mode: _modeDetail!), // Pass the whole mode detail
+        child:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : (_modeDetail == null
+                    ? const Center(child: Text("Mode detail not found!"))
+                    : Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildImageSection(),
+                          const SizedBox(height: 20),
+                          _buildDetailSection(),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          QuestionPage(mode: _modeDetail!),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16.0,
+                              ),
                             ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16.0),
-                        ),
-                        child: const Text(
-                          "Start Game",
-                          style: TextStyle(fontSize: 18,color: Colors.black),
-                        ),
-                        
+                            child: const Text(
+                              "Start Game",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                )),
+                    )),
       ),
     );
   }
@@ -145,17 +139,18 @@ class _DetailPageState extends State<DetailPage> {
       height: 200,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200], // Placeholder background
+        color: Colors.grey[200],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        child: imageBytes != null
-            ? Image.memory(
-                imageBytes,
-                fit: BoxFit.cover,
-                width: double.infinity,
-              )
-            : const Center(child: Text("No Image")),
+        child:
+            imageBytes != null
+                ? Image.memory(
+                  imageBytes,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                )
+                : const Center(child: Text("No Image")),
       ),
     );
   }

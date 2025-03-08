@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/home_page.dart';
-import 'package:mobile_app_project/historypage.dart'; // Import the history page
+import 'package:mobile_app_project/historypage.dart';
 
 class ScorePage extends StatefulWidget {
   final int score;
-  final String mode; // Add mode parameter
+  final String mode;
 
   const ScorePage({Key? key, required this.score, required this.mode})
     : super(key: key);
@@ -47,8 +47,7 @@ class _ScorePageState extends State<ScorePage> {
         _nameController.text.trim(),
         widget.mode,
         widget.score,
-      ); // Save the history
-      // Navigate back to the home page after saving
+      ); // Save the history Navigate back to the home page after saving
       if (mounted) {
         _navigateToHome();
       }
@@ -117,7 +116,6 @@ class _ScorePageState extends State<ScorePage> {
                 _isSaving
                     ? const CircularProgressIndicator()
                     : Column(
-                      // Changed Row to Column
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
@@ -135,7 +133,7 @@ class _ScorePageState extends State<ScorePage> {
                         ),
                         const SizedBox(
                           height: 20,
-                        ), // added a SizedBox for spacing
+                        ),
                         ElevatedButton(
                           onPressed: _navigateToHome,
                           style: ElevatedButton.styleFrom(

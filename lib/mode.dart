@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/api/mongoapi.dart';
-import 'package:mobile_app_project/detailpage.dart'; // Import DetailPage
+import 'package:mobile_app_project/detailpage.dart';
 import 'dart:convert';
 
 class ModeSelectPage extends StatefulWidget {
@@ -108,7 +108,6 @@ class ModeCard extends StatelessWidget {
       imageBytes = null;
     }
     return GestureDetector(
-      // Wrap in GestureDetector
       onTap: () {
         Navigator.push(
           context,
@@ -119,22 +118,21 @@ class ModeCard extends StatelessWidget {
         );
       },
       child: Card(
-        elevation: 4.0, // Add shadow for better visual appeal
+        elevation: 4.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        child: Padding( //remove container and add padding
+        child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (imageBytes != null)
                 Expanded(
-                  // Take up available space
                   child: Center(
                     child: Image.memory(
                       imageBytes,
-                      fit: BoxFit.contain, // Use contain to fit image
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
