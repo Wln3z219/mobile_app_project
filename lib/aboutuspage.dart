@@ -6,6 +6,7 @@ class Aboutuspage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -14,13 +15,21 @@ class Aboutuspage extends StatelessWidget {
           },
         ),
         title: const Center(child: Text("About us")),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: const Column(
-        // Add your about us content here
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(child: Text("This is the About Us Page")),
-        ],
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue, Colors.white],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Center(child: Text("This is the About Us Page"))],
+        ),
       ),
     );
   }

@@ -44,6 +44,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -52,8 +53,21 @@ class _HistoryPageState extends State<HistoryPage> {
           },
         ),
         title: const Text('History'),
+          backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: _isLoading
+      body:Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.blue,
+              Colors.white,
+            ],
+          ),
+        ),
+       child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _history.isEmpty
               ? const Center(child: Text('No history yet!'))
@@ -77,6 +91,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     );
                   },
                 ),
+      ),
     );
   }
 }

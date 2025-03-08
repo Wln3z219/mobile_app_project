@@ -147,6 +147,7 @@ class _QuestionPageState extends State<QuestionPage> {
         title: Text("Questions - ${widget.mode['mode']}"),
       ),
       body: Container(
+        padding: EdgeInsets.only(top : 75),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,

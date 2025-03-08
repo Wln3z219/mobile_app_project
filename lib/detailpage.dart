@@ -57,6 +57,7 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(widget.modeName), // Use the passed modeName
         leading: IconButton(
@@ -65,8 +66,24 @@ class _DetailPageState extends State<DetailPage> {
             Navigator.pop(context);
           },
         ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
-      body: _isLoading
+      body:Container(
+        padding: EdgeInsets.only(
+          top: 75,
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.blue,
+              Colors.white,
+            ],
+          ),
+        ),
+      child: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : (_modeDetail == null
               ? const Center(child: Text("Mode detail not found!"))
@@ -94,18 +111,21 @@ class _DetailPageState extends State<DetailPage> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
                           padding: const EdgeInsets.symmetric(
-                              vertical: 16.0), // Increase button height
+                              vertical: 16.0),
                         ),
                         child: const Text(
                           "Start Game",
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18,color: Colors.black),
                         ),
+                        
                       ),
-                      const SizedBox(height: 20), // Add some space below the button
+                      const SizedBox(height: 20),
                     ],
                   ),
                 )),
+      ),
     );
   }
 
