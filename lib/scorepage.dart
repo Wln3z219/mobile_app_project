@@ -99,7 +99,7 @@ class _ScorePageState extends State<ScorePage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "${widget.score} / 5",
+                  "${widget.score} / 300",
                   style: const TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,

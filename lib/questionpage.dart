@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:mobile_app_project/api/mongoapi.dart';
-import 'package:mobile_app_project/scorepage.dart'; // Import ScorePage
+import 'package:mobile_app_project/scorepage.dart';
 
 class QuestionPage extends StatefulWidget {
   final Map<String, dynamic> mode;
@@ -25,11 +26,15 @@ class _QuestionPageState extends State<QuestionPage> {
   String _collectionName = "";
   List<Map<String, dynamic>> _allQuestions = [];
 
+  int _start = 60;
+  late Timer _timer;
+
   @override
   void initState() {
     super.initState();
     _assignCollectionName();
     _fetchQuestions();
+    _startTimer();
   }
 
   void _assignCollectionName() {
@@ -132,42 +137,94 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 
   void _goToScorePage() {
+    _timer.cancel();
+      int finalScore = _calculateFinalScore();
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ScorePage(score: _score, mode: widget.mode['mode'])));
+                ScorePage(score: finalScore, mode: widget.mode['mode'])));
+  }
+
+   int _calculateFinalScore(){
+    return _score * _start;
+  }
+
+    void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (Timer timer) {
+      if (_start == 0) {
+        setState(() {
+          timer.cancel();
+          _goToScorePage();
+        });
+      } else {
+        setState(() {
+          _start--;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, // Extend body behind app bar
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text("Questions - ${widget.mode['mode']}"),
       ),
-      body: Container(
-        padding: EdgeInsets.only(top : 75),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.lightBlueAccent,
-              Colors.white,
-            ],
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 75),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.lightBlueAccent,
+                  Colors.white,
+                ],
+              ),
+            ),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : (_question == null
+                    ? const Center(child: Text("No questions found!"))
+                    : QuestionCard(
+                        question: _question!,
+                        onAnswerSelected: _handleAnswerSelected,
+                        selectedAnswer: _selectedAnswer,
+                        answerChecked: _answerChecked,
+                      )),
           ),
-        ),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : (_question == null
-                ? const Center(child: Text("No questions found!"))
-                : QuestionCard(
-                    question: _question!,
-                    onAnswerSelected: _handleAnswerSelected,
-                    selectedAnswer: _selectedAnswer,
-                    answerChecked: _answerChecked,
-                  )),
+          // Timer Display
+          Positioned(
+            bottom: 16.0,
+            right: 16.0,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Text(
+                'Time: $_start',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
