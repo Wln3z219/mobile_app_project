@@ -4,6 +4,7 @@ import 'package:mobile_app_project/aboutuspage.dart';
 import 'package:mobile_app_project/mode.dart';
 import 'package:mobile_app_project/historypage.dart';
 import 'api/mongoapi.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(const HomePage());
@@ -30,9 +31,15 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          "Welcome to Quiz",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FaIcon(FontAwesomeIcons.graduationCap, color: Colors.black),
+            Text(
+              "Welcome to Quiz",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -42,19 +49,13 @@ class _HomePageState extends State<HomePage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue,
-              Colors.white,
-            ],
+            colors: [Colors.blue, Colors.white],
           ),
         ),
         child: Column(
           children: [
             //add line
-            Container(
-              height: 1,
-              color: Colors.grey[400],
-            ),
+            Container(height: 1, color: Colors.grey[400]),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Padding(
@@ -63,8 +64,7 @@ class _HomePageState extends State<HomePage> {
                   child: FutureBuilder<Uint8List?>(
                     future: _imageDataFuture,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
@@ -92,18 +92,25 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 250,
                       height: 60,
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const ModeSelectPage()),
+                              builder: (context) => const ModeSelectPage(),
+                            ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 18),
+                        icon: FaIcon(
+                          FontAwesomeIcons.gamepad,
+                          color: Colors.white,
                         ),
-                        child: const Text('Select Mode'),
+                        label: Text('Select Mode'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -111,24 +118,24 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 250,
                       height: 60,
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HistoryPage()),
+                              builder: (context) => const HistoryPage(),
+                            ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 18),
+                        icon: FaIcon(
+                          FontAwesomeIcons.list,
+                          color: Colors.white,
                         ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center, // Center the row content
-                          children: [
-                            Icon(Icons.history),
-                            SizedBox(width: 8), // Add a space between icon and text
-                            Text('History'),
-                          ],
+                        label: Text('History'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(fontSize: 18),
                         ),
                       ),
                     ),
@@ -137,18 +144,25 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       width: 250,
                       height: 60,
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const Aboutuspage()),
+                              builder: (context) => const Aboutuspage(),
+                            ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 18),
+                        icon: FaIcon(
+                          FontAwesomeIcons.userGroup,
+                          color: Colors.white,
                         ),
-                        child: const Text('About us'),
+                        label: Text('About us'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          foregroundColor: Colors.white,
+                          textStyle: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
                   ],
