@@ -28,9 +28,8 @@ class _QuestionPageState extends State<QuestionPage> {
 
   int _start = 60;
   late Timer _timer;
-    Uint8List? _imageBytes;
+  Uint8List? _imageBytes;
   String _base64Image = "";
-
 
   @override
   void initState() {
@@ -50,17 +49,21 @@ class _QuestionPageState extends State<QuestionPage> {
       print("Fetching data from $_collectionName");
       _allQuestions = await MongoDatabase.getQuestions(_collectionName);
 
-      List<Map<String, dynamic>> filteredQuestion = _allQuestions
-          .where((q) =>
-              q['mode'] == widget.mode['mode'] && q['question'] != null)
-          .toList();
+      List<Map<String, dynamic>> filteredQuestion =
+          _allQuestions
+              .where(
+                (q) =>
+                    q['mode'] == widget.mode['mode'] && q['question'] != null,
+              )
+              .toList();
 
       if (filteredQuestion.isNotEmpty) {
         _questions = filteredQuestion;
         _loadRandomQuestion();
       } else {
         print(
-            "No questions found for mode: ${widget.mode['mode']} in collection $_collectionName");
+          "No questions found for mode: ${widget.mode['mode']} in collection $_collectionName",
+        );
         setState(() {
           _isLoading = false;
         });
@@ -84,16 +87,16 @@ class _QuestionPageState extends State<QuestionPage> {
     }
 
     setState(() {
-       _base64Image = _questions[_currentQuestionIndex]['image'] ?? "";
+      _base64Image = _questions[_currentQuestionIndex]['image'] ?? "";
       _imageBytes = null;
-        try {
-          if (_base64Image.isNotEmpty) {
-            _imageBytes = base64.decode(_base64Image);
-          }
-        } catch (e) {
-          print('Error decoding image: $e');
-          _imageBytes = null;
+      try {
+        if (_base64Image.isNotEmpty) {
+          _imageBytes = base64.decode(_base64Image);
         }
+      } catch (e) {
+        print('Error decoding image: $e');
+        _imageBytes = null;
+      }
       _question = _questions[_currentQuestionIndex];
       _isLoading = false;
       _answerChecked = false;
@@ -121,9 +124,11 @@ class _QuestionPageState extends State<QuestionPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(isCorrect ? "Correct!" : "Wrong!"),
-          content: Text(isCorrect
-              ? "You got it right!"
-              : "The correct answer is ${_question?['answer']}."),
+          content: Text(
+            isCorrect
+                ? "You got it right!"
+                : "The correct answer is ${_question?['answer']}.",
+          ),
           actions: <Widget>[
             TextButton(
               child: const Text("Next Question"),
@@ -153,10 +158,13 @@ class _QuestionPageState extends State<QuestionPage> {
     _timer.cancel();
     int finalScore = _calculateFinalScore();
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ScorePage(score: finalScore, mode: widget.mode['mode'])));
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) =>
+                ScorePage(score: finalScore, mode: widget.mode['mode']),
+      ),
+    );
   }
 
   int _calculateFinalScore() {
@@ -189,9 +197,7 @@ class _QuestionPageState extends State<QuestionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text("Questions - ${widget.mode['mode']}"),
-      ),
+      appBar: AppBar(title: Text("Questions - ${widget.mode['mode']}")),
       body: Stack(
         children: [
           Container(
@@ -200,23 +206,21 @@ class _QuestionPageState extends State<QuestionPage> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Colors.lightBlueAccent,
-                  Colors.white,
-                ],
+                colors: [Colors.lightBlueAccent, Colors.white],
               ),
             ),
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : (_question == null
-                    ? const Center(child: Text("No questions found!"))
-                    : QuestionCard(
-                        question: _question!,
-                        onAnswerSelected: _handleAnswerSelected,
-                        selectedAnswer: _selectedAnswer,
-                        answerChecked: _answerChecked,
-                        imageBytes:_imageBytes,
-                      )),
+            child:
+                _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : (_question == null
+                        ? const Center(child: Text("No questions found!"))
+                        : QuestionCard(
+                          question: _question!,
+                          onAnswerSelected: _handleAnswerSelected,
+                          selectedAnswer: _selectedAnswer,
+                          answerChecked: _answerChecked,
+                          imageBytes: _imageBytes,
+                        )),
           ),
           // Timer Display
           Positioned(
@@ -262,7 +266,6 @@ class QuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     List<dynamic> choices =
         question['choices'] != null && question['choices'] is List
             ? question['choices'] as List<dynamic>
@@ -292,8 +295,10 @@ class QuestionCard extends StatelessWidget {
             Center(
               child: Text(
                 question['question'] ?? "No Question Text",
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -311,30 +316,36 @@ class QuestionCard extends StatelessWidget {
                   crossAxisSpacing: 8.0,
                   mainAxisSpacing: 8.0,
                   childAspectRatio: 3,
-                  children: choices
-                      .map((choice) => GestureDetector(
-                            onTap: answerChecked
-                                ? null
-                                : () {
-                                    onAnswerSelected(choice);
-                                  },
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: selectedAnswer == choice
-                                    ? Colors.blue.withOpacity(0.5)
-                                    : null,
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Center(
+                  children:
+                      choices
+                          .map(
+                            (choice) => GestureDetector(
+                              onTap:
+                                  answerChecked
+                                      ? null
+                                      : () {
+                                        onAnswerSelected(choice);
+                                      },
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color:
+                                      selectedAnswer == choice
+                                          ? Colors.blue.withOpacity(0.5)
+                                          : null,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Center(
                                   child: Text(
-                                choice,
-                                textAlign: TextAlign.center,
-                              )),
+                                    choice,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ))
-                      .toList(),
+                          )
+                          .toList(),
                 ),
               ),
             ),

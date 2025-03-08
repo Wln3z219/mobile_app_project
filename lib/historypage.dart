@@ -28,9 +28,8 @@ class _HistoryPageState extends State<HistoryPage> {
       final historyString = prefs.getString('history');
       if (historyString != null) {
         List<dynamic> decodedHistory = jsonDecode(historyString);
-        _history = decodedHistory
-            .map((item) => item as Map<String, dynamic>)
-            .toList();
+        _history =
+            decodedHistory.map((item) => item as Map<String, dynamic>).toList();
       }
       setState(() {
         _isLoading = false;
@@ -84,36 +83,34 @@ class _HistoryPageState extends State<HistoryPage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue,
-              Colors.white,
-            ],
+            colors: [Colors.blue, Colors.white],
           ),
         ),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _history.isEmpty
+        child:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : _history.isEmpty
                 ? const Center(child: Text('No history yet!'))
                 : ListView.builder(
-                    itemCount: _history.length,
-                    itemBuilder: (context, index) {
-                      final historyEntry = _history[index];
-                      return Card(
-                        margin: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                          title: Text('Name: ${historyEntry['name']}'),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Mode: ${historyEntry['mode']}'),
-                              Text('Score: ${historyEntry['score']}'),
-                            ],
-                          ),
-                          trailing: Text(historyEntry['timestamp']),
+                  itemCount: _history.length,
+                  itemBuilder: (context, index) {
+                    final historyEntry = _history[index];
+                    return Card(
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text('Name: ${historyEntry['name']}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Mode: ${historyEntry['mode']}'),
+                            Text('Score: ${historyEntry['score']}'),
+                          ],
                         ),
-                      );
-                    },
-                  ),
+                        trailing: Text(historyEntry['timestamp']),
+                      ),
+                    );
+                  },
+                ),
       ),
     );
   }
@@ -150,13 +147,15 @@ class _HistoryPageState extends State<HistoryPage> {
 Future<void> saveHistory(String name, String mode, int score) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    String timestamp =
-        DateTime.now().toString().substring(0, 19); // Get current timestamp
+    String timestamp = DateTime.now().toString().substring(
+      0,
+      19,
+    ); // Get current timestamp
     Map<String, dynamic> newHistoryEntry = {
       'name': name,
       'mode': mode,
       'score': score,
-      'timestamp': timestamp
+      'timestamp': timestamp,
     };
 
     String? historyString = prefs.getString('history');
@@ -165,9 +164,8 @@ Future<void> saveHistory(String name, String mode, int score) async {
     if (historyString != null) {
       // If history already exists, add the new entry to it
       List<dynamic> decodedHistory = jsonDecode(historyString);
-      history = decodedHistory
-          .map((item) => item as Map<String, dynamic>)
-          .toList();
+      history =
+          decodedHistory.map((item) => item as Map<String, dynamic>).toList();
       history.add(newHistoryEntry);
     } else {
       // If history doesn't exist yet, create a new list with the new entry

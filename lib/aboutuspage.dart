@@ -22,8 +22,9 @@ class _AboutuspageState extends State<Aboutuspage> {
 
   Future<void> _fetchAboutUsData() async {
     try {
-      List<Map<String, dynamic>> data =
-          await MongoDatabase.getAboutUsData("About Us");
+      List<Map<String, dynamic>> data = await MongoDatabase.getAboutUsData(
+        "About Us",
+      );
       setState(() {
         _aboutUsData = data;
         _isLoading = false;
@@ -47,8 +48,7 @@ class _AboutuspageState extends State<Aboutuspage> {
             Navigator.pop(context);
           },
         ),
-        
-        title: Text("About us"),
+        title: const Center(child: Text("About us")),
         backgroundColor: Colors.transparent,
       ),
       body: Container(
@@ -59,17 +59,18 @@ class _AboutuspageState extends State<Aboutuspage> {
             colors: [Colors.blue, Colors.white],
           ),
         ),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : (_aboutUsData.isEmpty
-                ? const Center(child: Text("No About Us data found!"))
-                : ListView.builder(
-                    itemCount: _aboutUsData.length,
-                    itemBuilder: (context, index) {
-                      final person = _aboutUsData[index];
-                      return AboutUsCard(person: person);
-                    },
-                  )),
+        child:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : (_aboutUsData.isEmpty
+                    ? const Center(child: Text("No About Us data found!"))
+                    : ListView.builder(
+                      itemCount: _aboutUsData.length,
+                      itemBuilder: (context, index) {
+                        final person = _aboutUsData[index];
+                        return AboutUsCard(person: person);
+                      },
+                    )),
       ),
     );
   }

@@ -53,38 +53,34 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
         elevation: 0,
       ),
       body: Container(
-        padding: const EdgeInsets.only(
-          top: 75,
-        ),
+        padding: const EdgeInsets.only(top: 75),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.blue,
-              Colors.white,
-            ],
+            colors: [Colors.blue, Colors.white],
           ),
         ),
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : (_modes.isEmpty
-                ? const Center(child: Text("No modes found!"))
-                : GridView.builder(
-                    padding: const EdgeInsets.all(10.0),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 columns
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      childAspectRatio: 0.8,
-                    ),
-                    itemCount: _modes.length,
-                    itemBuilder: (context, index) {
-                      final mode = _modes[index];
-                      return ModeCard(mode: mode);
-                    },
-                  )),
+        child:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : (_modes.isEmpty
+                    ? const Center(child: Text("No modes found!"))
+                    : GridView.builder(
+                      padding: const EdgeInsets.all(10.0),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, // 2 columns
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
+                            childAspectRatio: 0.8,
+                          ),
+                      itemCount: _modes.length,
+                      itemBuilder: (context, index) {
+                        final mode = _modes[index];
+                        return ModeCard(mode: mode);
+                      },
+                    )),
       ),
     );
   }
@@ -112,8 +108,10 @@ class ModeCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailPage(
-                modeName: mode['mode']), // Navigate to DetailPage and pass modeName
+            builder:
+                (context) => DetailPage(
+                  modeName: mode['mode'],
+                ), // Navigate to DetailPage and pass modeName
           ),
         );
       },
@@ -130,10 +128,7 @@ class ModeCard extends StatelessWidget {
               if (imageBytes != null)
                 Expanded(
                   child: Center(
-                    child: Image.memory(
-                      imageBytes,
-                      fit: BoxFit.contain,
-                    ),
+                    child: Image.memory(imageBytes, fit: BoxFit.contain),
                   ),
                 ),
               const SizedBox(height: 8.0), // Space between image and text

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_project/home_page.dart';
+import 'package:mobile_app_project/splashscreen.dart';
 import 'api/mongoapi.dart';
 
 Future<void> main() async {
@@ -15,15 +15,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            useMaterial3: true,
-            appBarTheme: const AppBarTheme(
-                backgroundColor: Colors
-                    .transparent,
-                elevation:
-                    0.0, 
-                centerTitle: true)),
-        home: const HomePage());
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
+        ),
+      ),
+      home: const SplashScreen(),
+    );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile_app_project/home_page.dart';
 import 'package:mobile_app_project/historypage.dart';
 
@@ -116,46 +115,32 @@ class _ScorePageState extends State<ScorePage> {
                     : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 250,
-                          height: 60,
-                          child: ElevatedButton.icon(
-                            onPressed: _saveHistoryAndNavigateHome,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16.0,
-                                horizontal: 24.0,
-                              ),
-                            ),
-                            icon: FaIcon(FontAwesomeIcons.solidFolderClosed,color: Colors.white),
-                            label: Text(
-                              "Save",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: 250,
-                          height: 60,
-                        child: ElevatedButton.icon(
-                          onPressed: _navigateToHome,
+                        ElevatedButton(
+                          onPressed: _saveHistoryAndNavigateHome,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                            foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               vertical: 16.0,
                               horizontal: 24.0,
                             ),
                           ),
-                          icon: FaIcon(FontAwesomeIcons.house,color: Colors.white),
-                          label: Text(
-                            "Go to Home",
+                          child: const Text(
+                            "Save and Go to Home",
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _navigateToHome,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
+                              horizontal: 24.0,
+                            ),
+                          ),
+                          child: const Text(
+                            "Go to Home",
+                            style: TextStyle(fontSize: 18),
+                          ),
                         ),
                       ],
                     ),
