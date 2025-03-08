@@ -39,6 +39,17 @@ class MongoDatabase {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> getAboutUsData(String collectionName) async {
+    try {
+      var collection = db.collection(collectionName);
+      List<Map<String, dynamic>> aboutUsData = await collection.find().toList();
+      return aboutUsData;
+    } catch (e) {
+      print('Error fetching About Us data: $e');
+      return [];
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> getQuestions(String collectionName) async {
     try {
       var collection = db.collection(collectionName);
