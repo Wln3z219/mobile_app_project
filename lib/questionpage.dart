@@ -28,6 +28,9 @@ class _QuestionPageState extends State<QuestionPage> {
 
   int _start = 60;
   late Timer _timer;
+    Uint8List? _imageBytes;
+  String _base64Image = "";
+
 
   @override
   void initState() {
@@ -81,6 +84,16 @@ class _QuestionPageState extends State<QuestionPage> {
     }
 
     setState(() {
+       _base64Image = _questions[_currentQuestionIndex]['image'] ?? "";
+      _imageBytes = null;
+        try {
+          if (_base64Image.isNotEmpty) {
+            _imageBytes = base64.decode(_base64Image);
+          }
+        } catch (e) {
+          print('Error decoding image: $e');
+          _imageBytes = null;
+        }
       _question = _questions[_currentQuestionIndex];
       _isLoading = false;
       _answerChecked = false;
@@ -138,7 +151,7 @@ class _QuestionPageState extends State<QuestionPage> {
 
   void _goToScorePage() {
     _timer.cancel();
-      int finalScore = _calculateFinalScore();
+    int finalScore = _calculateFinalScore();
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -146,11 +159,11 @@ class _QuestionPageState extends State<QuestionPage> {
                 ScorePage(score: finalScore, mode: widget.mode['mode'])));
   }
 
-   int _calculateFinalScore(){
+  int _calculateFinalScore() {
     return _score * _start;
   }
 
-    void _startTimer() {
+  void _startTimer() {
     const oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (_start == 0) {
@@ -182,7 +195,7 @@ class _QuestionPageState extends State<QuestionPage> {
       body: Stack(
         children: [
           Container(
-            padding: EdgeInsets.only(top: 75),
+            padding: const EdgeInsets.only(top: 75),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -202,6 +215,7 @@ class _QuestionPageState extends State<QuestionPage> {
                         onAnswerSelected: _handleAnswerSelected,
                         selectedAnswer: _selectedAnswer,
                         answerChecked: _answerChecked,
+                        imageBytes:_imageBytes,
                       )),
           ),
           // Timer Display
@@ -235,6 +249,7 @@ class QuestionCard extends StatelessWidget {
   final Function(String) onAnswerSelected;
   final String? selectedAnswer;
   final bool answerChecked;
+  final Uint8List? imageBytes;
 
   const QuestionCard({
     Key? key,
@@ -242,20 +257,11 @@ class QuestionCard extends StatelessWidget {
     required this.onAnswerSelected,
     this.selectedAnswer,
     required this.answerChecked,
+    this.imageBytes,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String base64Image = question['image'] ?? "";
-    Uint8List? imageBytes;
-    try {
-      if (base64Image.isNotEmpty) {
-        imageBytes = base64.decode(base64Image);
-      }
-    } catch (e) {
-      print('Error decoding image: $e');
-      imageBytes = null;
-    }
 
     List<dynamic> choices =
         question['choices'] != null && question['choices'] is List
@@ -273,7 +279,7 @@ class QuestionCard extends StatelessWidget {
             if (imageBytes != null)
               Center(
                 child: Image.memory(
-                  imageBytes,
+                  imageBytes!,
                   width: 200,
                   height: 150,
                   fit: BoxFit.cover,

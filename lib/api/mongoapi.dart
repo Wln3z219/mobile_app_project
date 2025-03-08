@@ -74,6 +74,31 @@ class MongoDatabase {
       return [];
     }
   }
+  static Future<List<Map<String, dynamic>>> getQuestionsByMode(String collectionName, String modeName) async {
+    try {
+      var collection = db.collection(collectionName);
+      final count = await collection.count();
+      print("count is $count");
+      if (count == 0) {
+        return [];
+      }
+
+      // Fetch all questions related to the mode
+      List<Map<String, dynamic>> allQuestions = await collection.find(where.eq('mode', modeName)).toList();
+      print("mode is $modeName");
+      // Shuffle the list of questions to ensure randomness
+      allQuestions.shuffle();
+
+      // Take only the first 5 questions (or fewer if there are not enough)
+      int numberOfQuestionsToReturn = min(5, allQuestions.length);
+      List<Map<String, dynamic>> randomQuestions = allQuestions.sublist(0, numberOfQuestionsToReturn);
+      print("question is $randomQuestions");
+      return randomQuestions;
+    } catch (e) {
+      print('Error fetching random question: $e');
+      return [];
+    }
+  }
 
   static Future<List<Map<String, dynamic>>> getModes() async {
     try {
