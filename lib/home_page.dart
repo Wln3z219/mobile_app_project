@@ -30,7 +30,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("Welcome to Quiz"),
+        title: const Text(
+          "Welcome to Quiz",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -47,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Column(
           children: [
-             //add line
+            //add line
             Container(
               height: 1,
               color: Colors.grey[400],
@@ -55,12 +58,13 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Padding(
-                padding: const EdgeInsets.only(top : 60),
+                padding: const EdgeInsets.only(top: 60),
                 child: Center(
                   child: FutureBuilder<Uint8List?>(
                     future: _imageDataFuture,
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
@@ -84,44 +88,68 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ModeSelectPage()),
-                        );
-                      },
-                      child: const Text('Select Mode'),
-                    ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HistoryPage()),
-                        );
-                      },
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.history),
-                          SizedBox(width: 8),
-                          Text('History'),
-                        ],
+                    // Select mode button
+                    SizedBox(
+                      width: 250,
+                      height: 60,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ModeSelectPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        child: const Text('Select Mode'),
                       ),
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Aboutuspage()),
-                        );
-                      },
-                      child: const Text('About us'),
+                    // History button
+                    SizedBox(
+                      width: 250,
+                      height: 60,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HistoryPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center, // Center the row content
+                          children: [
+                            Icon(Icons.history),
+                            SizedBox(width: 8), // Add a space between icon and text
+                            Text('History'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    // About us button
+                    SizedBox(
+                      width: 250,
+                      height: 60,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Aboutuspage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 18),
+                        ),
+                        child: const Text('About us'),
+                      ),
                     ),
                   ],
                 ),
