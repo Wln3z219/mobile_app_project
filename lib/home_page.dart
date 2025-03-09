@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Padding(
-                padding: const EdgeInsets.only(top: 60),
+                padding: const EdgeInsets.only(top: 100),
                 child: Center(
                   child: FutureBuilder<Uint8List?>(
                     future: _imageDataFuture,

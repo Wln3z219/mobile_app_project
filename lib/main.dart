@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_project/splashscreen.dart';
+import 'package:mobile_app_project/home_page.dart';
 import 'api/mongoapi.dart';
 
 Future<void> main() async {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      home: const SplashScreen(),
+      home: const HomePage(),
     );
   }
 }
