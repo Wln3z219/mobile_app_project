@@ -57,7 +57,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(widget.modeName), // Use the passed modeName
+        title: Text(widget.modeName , style: TextStyle(fontWeight: FontWeight.bold ),), // Use the passed modeName
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -76,55 +76,58 @@ class _DetailPageState extends State<DetailPage> {
             colors: [Colors.blue, Colors.white],
           ),
         ),
-        child:
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : (_modeDetail == null
-                    ? const Center(child: Text("Mode detail not found!"))
-                    : Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildImageSection(),
-                          const SizedBox(height: 20),
-                          _buildDetailSection(),
-                          const Spacer(),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          QuestionPage(mode: _modeDetail!),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 16.0,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : (_modeDetail == null
+                ? const Center(child: Text("Mode detail not found!"))
+                : Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ModeDetailCard(modeDetail: _modeDetail!),
+                        const Spacer(),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    QuestionPage(mode: _modeDetail!),
                               ),
-                            ),
-                            child: const Text(
-                              "Start Game",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
                             ),
                           ),
-                          const SizedBox(height: 20),
-                        ],
-                      ),
-                    )),
+                          child: const Text(
+                            "Start Game",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  )),
       ),
     );
   }
+}
 
-  Widget _buildImageSection() {
-    String base64Image = _modeDetail!['image'] ?? "";
+class ModeDetailCard extends StatelessWidget {
+  final Map<String, dynamic> modeDetail;
+
+  const ModeDetailCard({Key? key, required this.modeDetail}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String base64Image = modeDetail['image'] ?? "";
     Uint8List? imageBytes;
     try {
       if (base64Image.isNotEmpty) {
@@ -135,39 +138,43 @@ class _DetailPageState extends State<DetailPage> {
       imageBytes = null;
     }
 
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child:
-            imageBytes != null
-                ? Image.memory(
-                  imageBytes,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                )
-                : const Center(child: Text("No Image")),
-      ),
-    );
-  }
-
-  Widget _buildDetailSection() {
-    return Expanded(
-      child: SingleChildScrollView(
+    return Card(
+      elevation: 5,
+      margin: EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.grey[200],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: imageBytes != null
+                    ? Image.memory(
+                        imageBytes,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      )
+                    : const Center(child: Text("No Image")),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Mode Name
             Text(
-              _modeDetail!['mode'] ?? "No Mode",
+              modeDetail['mode'] ?? "No Mode",
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
+
+            // Detail
             Text(
-              _modeDetail!['detail'] ?? "No detail available",
+              modeDetail['detail'] ?? "No detail available",
               style: const TextStyle(fontSize: 16),
             ),
           ],

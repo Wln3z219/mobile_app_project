@@ -206,7 +206,7 @@ class _QuestionPageState extends State<QuestionPage> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Colors.lightBlueAccent, Colors.white],
+                colors: [Colors.blue, Colors.white],
               ),
             ),
             child:

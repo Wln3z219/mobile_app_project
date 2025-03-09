@@ -70,7 +70,7 @@ class _ScorePageState extends State<ScorePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("Your Score"),
+        title: const Text("Your Score" , style: TextStyle(fontWeight: FontWeight.bold),),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,

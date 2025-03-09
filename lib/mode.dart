@@ -48,7 +48,7 @@ class _ModeSelectPageState extends State<ModeSelectPage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text("Select Mode"),
+        title: const Text("Select Mode" , style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),

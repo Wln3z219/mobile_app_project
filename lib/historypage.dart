@@ -66,7 +66,7 @@ class _HistoryPageState extends State<HistoryPage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('History'),
+        title: const Text('History' , style: TextStyle(fontWeight: FontWeight.bold ),),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [

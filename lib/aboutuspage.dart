@@ -48,7 +48,7 @@ class _AboutuspageState extends State<Aboutuspage> {
             Navigator.pop(context);
           },
         ),
-        title: const Center(child: Text("About us")),
+        title: Text("About us" , style: TextStyle(fontWeight: FontWeight.bold),),
         backgroundColor: Colors.transparent,
       ),
       body: Container(
